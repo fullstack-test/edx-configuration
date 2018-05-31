@@ -162,7 +162,7 @@ if [[ $stack == "devstack" ]]; then # Install devstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Devstack"
-    curl -fOL# https://raw.githubusercontent.com/edx/configuration/${OPENEDX_RELEASE}/vagrant/release/devstack/Vagrantfile
+    curl -fOL# https://raw.githubusercontent.com/Microsoft/edx-configuration/${OPENEDX_RELEASE}/vagrant/release/devstack/Vagrantfile
     vagrant plugin install vagrant-vbguest
 elif [[ $stack == "fullstack" ]]; then # Install fullstack
     # Warn if release chosen is not open-release (Eucalyptus and up)
@@ -171,7 +171,7 @@ elif [[ $stack == "fullstack" ]]; then # Install fullstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Fullstack"
-    curl -fOL# https://raw.githubusercontent.com/edx/configuration/${OPENEDX_RELEASE}/vagrant/release/fullstack/Vagrantfile
+    curl -fOL# https://raw.githubusercontent.com/Microsoft/edx-configuration/${OPENEDX_RELEASE}/vagrant/release/fullstack/Vagrantfile
     vagrant plugin install vagrant-hostsupdater
 else # Throw error
     echo -e "${ERROR}Unrecognized stack name, must be either devstack or fullstack!${NC}"

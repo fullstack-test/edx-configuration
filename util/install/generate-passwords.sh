@@ -4,7 +4,7 @@
 # a new file just like it, with the generated values.
 
 TARGET=${OPENEDX_RELEASE-master}
-wget -q "https://raw.githubusercontent.com/edx/configuration/$TARGET/playbooks/sample_vars/passwords.yml" -O passwords-template.yml
+wget -q "https://raw.githubusercontent.com/Microsoft/edx-configuration/$TARGET/playbooks/sample_vars/passwords.yml" -O passwords-template.yml
 
 while IFS= read -r line; do
     # Make a random string. SECRET_KEY's should be longer.
