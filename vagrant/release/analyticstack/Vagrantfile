@@ -48,7 +48,7 @@ end
 # to a name and a file path, which are used for retrieving
 # a Vagrant box from the internet.
 openedx_releases = {
-  "open-release/ficus.master" => "ficus-analyticstack-2017-04-20",
+  "open-release/hawthorn.beta1" => "ficus-analyticstack-2017-04-20",
   "open-release/ficus.3" => "ficus-analyticstack-2017-04-20",
 
   "open-release/eucalyptus" => "eucalyptus-analyticstack-2016-09-04",

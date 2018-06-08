@@ -56,7 +56,7 @@ Dockerfiles make use of these build arguments:
 -  ``OPENEDX_RELEASE`` is the release branch to use. It defaults to "master".
    To use an Open edX release, provide the full branch name:
 
-``--build-arg OPENEDX_RELEASE=open-release/ficus.master``
+``--build-arg OPENEDX_RELEASE=open-release/hawthorn.beta1``
 
 -  ``IMAGE_PREFIX`` is the release branch component to add to images. It
    defaults to an empty string for master builds. For Open edX release, use the
