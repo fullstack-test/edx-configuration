@@ -204,7 +204,7 @@ EDXAPP_ENABLE_SYSADMIN_DASHBOARD: false
 EDXAPP_ALLOW_COURSE_STAFF_GRADE_DOWNLOADS: true
 
 # Enable Azure Media Service XBlock for embed video player
-EDXAPP_ENABLE_AZURE_MEDIA_SERVICES_XBLOCK: true
+EDXAPP_ENABLE_AZURE_MEDIA_SERVICES_XBLOCK: false
 
 # This is different from lms/envs/common.py
 # We're turning it on in config because it needs a lot more configuration
