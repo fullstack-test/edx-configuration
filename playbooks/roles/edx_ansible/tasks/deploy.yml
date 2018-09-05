@@ -1,14 +1,14 @@
 ---
-- name: Git checkout edx_ansible repo into edx_ansible_code_dir
-  git:
-    dest: "{{ edx_ansible_code_dir }}"
-    repo: "{{ edx_ansible_source_repo }}"
-    version: "{{ configuration_version }}"
-    accept_hostkey: yes
-  become_user: "{{ edx_ansible_user }}"
-  tags:
-    - install
-    - install:code
+# name: Git checkout edx_ansible repo into edx_ansible_code_dir
+#  git:
+#   dest: "{{ edx_ansible_code_dir }}"
+#   repo: "{{ edx_ansible_source_repo }}"
+#   version: "{{ configuration_version }}"
+#   accept_hostkey: yes
+# become_user: "{{ edx_ansible_user }}"
+# tags:
+#   - install
+#   - install:code
 
 - name: Install edx_ansible venv requirements
   pip:
