@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg:" Git checkout edx_ansible repo into edx_ansible_code_dir edx_ansible_code_dir = {{ edx_ansible_code_dir }}, edx_ansible_source_repo = {{ edx_ansible_source_repo }}, configuration_version = {{ configuration_version }} "
+    msg: "Git checkout edx_ansible repo into edx_ansible_code_dir edx_ansible_code_dir {{ edx_ansible_code_dir }}   edx_ansible_source_repo  {{ edx_ansible_source_repo }}  configuration_version  {{ configuration_version }}"
 
 # name: Git checkout edx_ansible repo into edx_ansible_code_dir
 #  git:
