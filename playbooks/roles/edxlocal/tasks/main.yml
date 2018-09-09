@@ -64,6 +64,8 @@
 - name: create read-only reports user for the analytics-api
   mysql_user:
     host: "{{ mysql_user_host }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
     name: "{{ ANALYTICS_API_DATABASES.reports.USER }}"
     password: "{{ ANALYTICS_API_DATABASES.reports.PASSWORD }}"
     priv: '{{ ANALYTICS_API_DATABASES.reports.NAME }}.*:SELECT'
