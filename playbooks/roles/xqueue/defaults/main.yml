@@ -52,6 +52,7 @@ XQUEUE_MYSQL_USER: 'xqueue001'
 XQUEUE_MYSQL_PASSWORD: 'password'
 XQUEUE_MYSQL_HOST: 'localhost'
 XQUEUE_MYSQL_PORT: '3306'
+XQUEUE_HTTP_PORT: '8040'
 XQUEUE_MYSQL_OPTIONS: {}
 XQUEUE_MYSQL_CONN_MAX_AGE: 0 # This is Django's default https://docs.djangoproject.com/en/1.11/ref/settings/#conn-max-age
 
@@ -150,7 +151,7 @@ xqueue_home: "{{ COMMON_APP_DIR }}/{{ xqueue_service_name }}"
 # Default nginx listen port
 # These should be overrided if you want
 # to serve all content on port 80
-xqueue_gunicorn_port: 8040
+xqueue_gunicorn_port: "{{ XQUEUE_HTTP_PORT }}"
 xqueue_gunicorn_host: 127.0.0.1
 
 xqueue_environment:
