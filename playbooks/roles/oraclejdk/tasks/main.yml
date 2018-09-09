@@ -15,12 +15,16 @@
   apt:
     name: "{{ item }}"
   with_items: "{{ oraclejdk_debian_pkgs }}"
+  tags:
+    - install
 
 - name: Download Oracle Java
   get_url:
     url: "{{ oraclejdk_url }}"
     headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
     dest: "/var/tmp/{{ oraclejdk_file }}"
+  tags:
+    - install
 
 - name: Create jvm dir
   file:
@@ -28,12 +32,16 @@
     state: directory
     owner: root
     group: root
+  tags:
+    - install
 
 - name: Untar Oracle Java
   unarchive:
     src: "/var/tmp/{{ oraclejdk_file }}"
     dest: "/usr/lib/jvm"
     copy: no
+  tags:
+    - install
 
 - name: Create symlink expected by elasticsearch
   file:
@@ -52,6 +60,8 @@
     - javac
     - javaws
     - jarsigner
+  tags:
+    - install 
 
 - name: Add JAVA_HOME for Oracle Java
   template:
@@ -60,3 +70,5 @@
     owner: root
     group: root
     mode: "0755"
+  tags:
+    - install
