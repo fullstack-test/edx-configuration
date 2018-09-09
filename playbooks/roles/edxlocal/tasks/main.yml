@@ -4,7 +4,7 @@
 
 - set_fact:
     mysql_user_host: "{{ EDXAPP_MYSQL_HOST }}"
- - set_fact:
+- set_fact:
     mysql_user_host: '%'
   when: EDXAPP_MYSQL_HOST != 'localhost'
 
