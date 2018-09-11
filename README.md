@@ -1,6 +1,6 @@
 # Configuration Management
 
-## Introduction
+## Introduction test
 
 The goal of the edx/configuration project is to provide a simple, but
 flexible, way for anyone to stand up an instance of Open edX that is
