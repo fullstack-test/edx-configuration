@@ -100,7 +100,7 @@ CONFIGURATION_VERSION=${CONFIGURATION_VERSION-$OPENEDX_RELEASE}
 ## Clone the configuration repository and run Ansible
 ##
 cd /var/tmp
-git clone https://github.com/edx/configuration
+git clone https://github.com/Microsoft/edx-configuration
 cd configuration
 git checkout $CONFIGURATION_VERSION
 git pull
