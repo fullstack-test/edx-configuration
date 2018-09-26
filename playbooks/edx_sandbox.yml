@@ -67,7 +67,7 @@
     - role: oxa_demo_courses
       when: ENABLE_KITCHEN_SINK_COURSE
     # not ready yet: - edx_notes_api
-    - role:demo
+    - demo
     - oauth_client_setup
     - oraclejdk
     - role: elasticsearch
