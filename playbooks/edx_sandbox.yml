@@ -63,8 +63,10 @@
       when: SANDBOX_ENABLE_ANALYTICS_API
     - role: insights
       when: SANDBOX_ENABLE_INSIGHTS
+    - role: oxa_demo_courses
+      when: ENABLE_KITCHEN_SINK_COURSE
     # not ready yet: - edx_notes_api
-    - demo
+    - role:demo
     - oauth_client_setup
     - oraclejdk
     - role: elasticsearch
