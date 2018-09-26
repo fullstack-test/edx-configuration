@@ -30,6 +30,7 @@
     SANDBOX_ENABLE_INSIGHTS: true
     SANDBOX_ENABLE_RABBITMQ: true
     JOURNALS_ENABLED: false
+    ENABLE_KITCHEN_SINK_COURSE: true
   roles:
     - role: swapfile
       SWAPFILE_SIZE: 4GB
