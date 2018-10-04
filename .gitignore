@@ -1,0 +1,35 @@
+*.swp
+*.pyc
+.idea/
+.vagrant
+\#*\#
+*~
+.#*
+
+vagrant/*/*/edx-platform
+vagrant/*/*/cs_comments_service
+vagrant/*/*/ora
+vagrant/*/*/analytics_api
+vagrant/*/*/insights
+vagrant/*/*/ecommerce
+vagrant/*/*/programs
+vagrant_ansible_inventory_default
+
+### OS X artifacts
+*.DS_Store
+.AppleDouble
+:2e_*
+:2e#
+
+## Make artifacts
+.build
+playbooks/travis-test.yml
+
+## Local virtualenv
+/venv
+
+## Ansible Artifacts
+*.retry
+
+### VisualStudioCode ###
+.vscode/*

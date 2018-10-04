@@ -1,0 +1,7 @@
+*
+!playbooks/
+!docker/build/*
+!docker/build/*/*.yml
+docker/build/*/Dockerfile
+!docker/plays/
+!util/install/
