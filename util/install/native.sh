@@ -65,6 +65,11 @@ sudo -H pip install --upgrade virtualenv==15.2.0
 ##
 VERSION_VARS=(
     edx_platform_version
+    configuration_version
+    THEMES_VERSION
+)
+
+EDX_VERSION_VARS=(
     certs_version
     forum_version
     xqueue_version
@@ -76,7 +81,6 @@ VERSION_VARS=(
     ECOMMERCE_VERSION
     ECOMMERCE_WORKER_VERSION
     DISCOVERY_VERSION
-    THEMES_VERSION
 )
 
 for var in ${VERSION_VARS[@]}; do
@@ -84,6 +88,16 @@ for var in ${VERSION_VARS[@]}; do
     # or OPENEDX_RELEASE, if provided.
     ENV_VAR=$(echo $var | tr '[:lower:]' '[:upper:]')
     eval override=\${$ENV_VAR-\$OPENEDX_RELEASE}
+    if [ -n "$override" ]; then
+        EXTRA_VARS="-e $var=$override $EXTRA_VARS"
+    fi
+done
+
+for var in ${EDX_VERSION_VARS[@]}; do
+    # Each variable can be overridden by a similarly-named environment variable,
+    # or EDX_OPENEDX_RELEASE, if provided.
+    ENV_VAR=$(echo $var | tr '[:lower:]' '[:upper:]')
+    eval override=\${$ENV_VAR-\$EDX_OPENEDX_RELEASE}
     if [ -n "$override" ]; then
         EXTRA_VARS="-e $var=$override $EXTRA_VARS"
     fi
@@ -100,7 +114,7 @@ CONFIGURATION_VERSION=${CONFIGURATION_VERSION-$OPENEDX_RELEASE}
 ## Clone the configuration repository and run Ansible
 ##
 cd /var/tmp
-git clone https://github.com/edx/configuration
+git clone https://github.com/Microsoft/edx-configuration configuration
 cd configuration
 git checkout $CONFIGURATION_VERSION
 git pull
