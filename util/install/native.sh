@@ -66,6 +66,7 @@ sudo -H pip install --upgrade virtualenv==15.2.0
 VERSION_VARS=(
     edx_platform_version
     configuration_version
+    THEMES_VERSION
 )
 
 EDX_VERSION_VARS=(
@@ -80,7 +81,6 @@ EDX_VERSION_VARS=(
     ECOMMERCE_VERSION
     ECOMMERCE_WORKER_VERSION
     DISCOVERY_VERSION
-    THEMES_VERSION
 )
 
 for var in ${VERSION_VARS[@]}; do
