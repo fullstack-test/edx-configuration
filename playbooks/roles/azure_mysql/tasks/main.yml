@@ -22,7 +22,7 @@
 - name: create databases
   mysql_db:
     db: "{{ item }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
     login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
@@ -34,7 +34,7 @@
 - name: create database users
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
     login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"	
@@ -48,9 +48,9 @@
 - name: setup the migration db user
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     name: "{{ COMMON_MYSQL_MIGRATE_USER }}"
     password: "{{ COMMON_MYSQL_MIGRATE_PASS }}"
@@ -62,9 +62,9 @@
 - name: create api user for the analytics api
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     name: "{{ ANALYTICS_API_DATABASES.default.USER }}"
     password: "{{ ANALYTICS_API_DATABASES.default.PASSWORD }}"
@@ -74,9 +74,9 @@
 - name: create read-only reports user for the analytics-api
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     name: "{{ ANALYTICS_API_DATABASES.reports.USER }}"
     password: "{{ ANALYTICS_API_DATABASES.reports.PASSWORD }}"
@@ -86,9 +86,9 @@
 - name: create a database for the hive metastore
   mysql_db:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     db: "{{ HIVE_METASTORE_DATABASE.name }}"
     state: "present"
@@ -98,9 +98,9 @@
 - name: setup the edx-notes-api db user
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     name: "{{ EDX_NOTES_API_MYSQL_DB_USER }}"
     password: "{{ EDX_NOTES_API_MYSQL_DB_PASS }}"
@@ -110,20 +110,20 @@
 - name: setup the read-only db user
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     name: "{{ COMMON_MYSQL_READ_ONLY_USER }}"
     password: "{{ COMMON_MYSQL_READ_ONLY_PASS }}"
-    priv: "*.*:ALL"
+    priv: "*.*:SELECT"
 
 - name: setup the admin db user
   mysql_user:
     host: "{{ mysql_user_host }}"
-    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }}"
+    login_user: "{{ EDXAPP_MYSQL_USER_ADMIN }@{{ EDXAPP_MYSQL_CLOUD_SERVER_NAME }}"
     login_password: "{{ EDXAPP_MYSQL_PASSWORD_ADMIN }}"
-    login_host: "{{ mysql_server_fqdn }}"
+    login_host: "{{ MYSQL_SERVER_FQDN }}"
     ssl_ca: "{{ AZURE_MYSQL_SSL_CA }}"
     name: "{{ COMMON_MYSQL_ADMIN_USER }}"
     password: "{{ COMMON_MYSQL_ADMIN_PASS }}"
