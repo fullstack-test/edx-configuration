@@ -789,7 +789,7 @@ EDXAPP_SOCIAL_AUTH_SAML_SP_PUBLIC_CERT_DICT: {}
 EDXAPP_SESSION_SAVE_EVERY_REQUEST: false
 
 EDXAPP_SESSION_COOKIE_SECURE: false
-
+EDXAPP_ONLY_THIRD_PARTY_AUTH: true
 # TODO: bbeggs remove this before prod, temp fix to get load testing running
 EDXAPP_LMS_ALLOWED_HOSTS: ["*", "{{ EDXAPP_LMS_SITE_NAME }}", "{{ EDXAPP_PREVIEW_LMS_BASE }}"]
 EDXAPP_CMS_ALLOWED_HOSTS: ["*", "{{ EDXAPP_CMS_SITE_NAME }}"]
@@ -1467,6 +1467,7 @@ cms_env_config:
   COURSE_IMPORT_EXPORT_BUCKET: "{{ EDXAPP_IMPORT_EXPORT_BUCKET }}"
   STATIC_URL_BASE: "{{ EDXAPP_CMS_STATIC_URL_BASE }}"
   CMS_ALLOWED_HOSTS: "{{ EDXAPP_CMS_ALLOWED_HOSTS }}"
+  ONLY_THIRD_PARTY_AUTH: "{{ EDXAPP_ONLY_THIRD_PARTY_AUTH }}"
 
 # install dir for the edx-platform repo
 edxapp_code_dir: "{{ edxapp_app_dir }}/edx-platform"
