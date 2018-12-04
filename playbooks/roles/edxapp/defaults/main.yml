@@ -789,6 +789,10 @@ EDXAPP_SOCIAL_AUTH_SAML_SP_PUBLIC_CERT_DICT: {}
 EDXAPP_SESSION_SAVE_EVERY_REQUEST: false
 
 EDXAPP_SESSION_COOKIE_SECURE: false
+EDXAPP_ONLY_THIRD_PARTY_AUTH: false
+# TODO: bbeggs remove this before prod, temp fix to get load testing running
+EDXAPP_LMS_ALLOWED_HOSTS: ["*", "{{ EDXAPP_LMS_SITE_NAME }}", "{{ EDXAPP_PREVIEW_LMS_BASE }}"]
+EDXAPP_CMS_ALLOWED_HOSTS: ["*", "{{ EDXAPP_CMS_SITE_NAME }}"]
 
 # Optionally add a cron job to run the "clearsessions" management command to delete expired sessions
 # Hours and minutes follow cron syntax.
@@ -1064,6 +1068,9 @@ edxapp_generic_auth_config:  &edxapp_generic_auth
   AWS_QUERYSTRING_AUTH: "{{ EDXAPP_AWS_QUERYSTRING_AUTH }}"
   AWS_STORAGE_BUCKET_NAME: "{{ EDXAPP_AWS_STORAGE_BUCKET_NAME }}"
   AWS_S3_CUSTOM_DOMAIN: "{{ EDXAPP_AWS_S3_CUSTOM_DOMAIN }}"
+  AZURE_ACCOUNT_KEY: "{{ EDXAPP_AZURE_ACCOUNT_KEY }}"
+  AZURE_ACCOUNT_NAME: "{{ EDXAPP_AZURE_ACCOUNT_NAME }}"
+  AZURE_CONTAINER: "{{ EDXAPP_AZURE_CONTAINER }}"
   SWIFT_USERNAME: "{{ EDXAPP_SWIFT_USERNAME }}"
   SWIFT_KEY: "{{ EDXAPP_SWIFT_KEY }}"
   SWIFT_TENANT_ID: "{{ EDXAPP_SWIFT_TENANT_ID }}"
@@ -1148,6 +1155,7 @@ generic_env_config:  &edxapp_generic_env
     STORAGE_TYPE: "{{ EDXAPP_GRADE_STORAGE_TYPE | default(None) }}"
     BUCKET: "{{ EDXAPP_GRADE_BUCKET | default(None) }}"
     ROOT_PATH: "{{ EDXAPP_GRADE_ROOT_PATH | default(None) }}"
+    CONTAINER: "{{ EDXAPP_GRADE_STORAGE_CONTAINER | default(None) }}"
   STATIC_ROOT_BASE: "{{ edxapp_staticfile_dir }}"
   LMS_BASE: "{{ EDXAPP_LMS_BASE }}"
   CMS_BASE: "{{ EDXAPP_CMS_BASE }}"
@@ -1417,6 +1425,7 @@ lms_env_config:
   ANALYTICS_API_URL: "{{ EDXAPP_LMS_ANALYTICS_API_URL }}"
   GOOGLE_SITE_VERIFICATION_ID: "{{ EDXAPP_GOOGLE_SITE_VERIFICATION_ID }}"
   STATIC_URL_BASE: "{{ EDXAPP_LMS_STATIC_URL_BASE }}"
+  LMS_ALLOWED_HOSTS: "{{ EDXAPP_LMS_ALLOWED_HOSTS }}"
 
 cms_auth_config:
   <<: *edxapp_generic_auth
@@ -1457,6 +1466,8 @@ cms_env_config:
   ALTERNATE_WORKER_QUEUES: "lms"
   COURSE_IMPORT_EXPORT_BUCKET: "{{ EDXAPP_IMPORT_EXPORT_BUCKET }}"
   STATIC_URL_BASE: "{{ EDXAPP_CMS_STATIC_URL_BASE }}"
+  CMS_ALLOWED_HOSTS: "{{ EDXAPP_CMS_ALLOWED_HOSTS }}"
+  ONLY_THIRD_PARTY_AUTH: "{{ EDXAPP_ONLY_THIRD_PARTY_AUTH }}"
 
 # install dir for the edx-platform repo
 edxapp_code_dir: "{{ edxapp_app_dir }}/edx-platform"
@@ -1493,7 +1504,7 @@ edxapp_theme_source_repo: 'https://{{ COMMON_GIT_MIRROR }}/Stanford-Online/edx-t
 edxapp_theme_version: 'master'
 
 # make this the public URL instead of writable
-edx_platform_repo: "https://{{ COMMON_GIT_MIRROR }}/edx/edx-platform.git"
+edx_platform_repo: "https://{{ COMMON_GIT_MIRROR }}/microsoft/edx-platform.git"
 # `edx_platform_version` can be anything that git recognizes as a commit
 # reference, including a tag, a branch name, or a commit hash
 edx_platform_version: 'release'
