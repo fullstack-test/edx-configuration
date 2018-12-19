@@ -224,6 +224,9 @@ EDXAPP_ENABLE_SYSADMIN_DASHBOARD: false
 EDXAPP_ENABLE_COURSE_DISCOVERY: true
 EDXAPP_ENABLE_DASHBOARD_TABS: true
 
+# Making Honor mode eligible for certificate
+ENABLE_CERTIFICATES_FOR_HONOR_MODE: true
+
 # This is different from lms/envs/common.py
 # We're turning it on in config because it needs a lot more configuration
 # support, such as settings.DATABASES and initial database creation which is
