@@ -225,7 +225,7 @@ EDXAPP_ENABLE_COURSE_DISCOVERY: true
 EDXAPP_ENABLE_DASHBOARD_TABS: true
 
 # Making Honor mode eligible for certificate
-ENABLE_CERTIFICATES_FOR_HONOR_MODE: true
+EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE: true
 
 # This is different from lms/envs/common.py
 # We're turning it on in config because it needs a lot more configuration
@@ -1210,7 +1210,8 @@ generic_env_config:  &edxapp_generic_env
         SECRET_KEY: "{{ EDXAPP_JWT_SECRET_KEY }}"
   THIRD_PARTY_AUTH_BACKENDS: "{{ EDXAPP_THIRD_PARTY_AUTH_BACKENDS }}"
   
-
+  ENABLE_CERTIFICATES_FOR_HONOR_MODE : "{{ EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE }}"
+  
   #must end in slash (https://docs.djangoproject.com/en/1.4/ref/settings/#media-url)
   MEDIA_URL:  "{{ EDXAPP_MEDIA_URL }}/"
   MEDIA_ROOT: "{{ edxapp_media_dir }}/"
