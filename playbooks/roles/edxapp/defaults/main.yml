@@ -224,12 +224,15 @@ EDXAPP_ENABLE_SYSADMIN_DASHBOARD: false
 EDXAPP_ENABLE_COURSE_DISCOVERY: true
 EDXAPP_ENABLE_DASHBOARD_TABS: true
 
+# Making Honor mode eligible for certificate
+EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE: true
+
 # Social Django defaults to HTTP scheme when generating redirect_uri
 # It is therefore necessary to add this setting in order to support
 # changing the redirect_uri to HTTPS. Defaulting to False (default behavior)
 # and expecting client to override.
 EDXAPP_REDIRECT_IS_HTTPS: false
- 
+
 # This is different from lms/envs/common.py
 # We're turning it on in config because it needs a lot more configuration
 # support, such as settings.DATABASES and initial database creation which is
@@ -1214,7 +1217,8 @@ generic_env_config:  &edxapp_generic_env
         SECRET_KEY: "{{ EDXAPP_JWT_SECRET_KEY }}"
   THIRD_PARTY_AUTH_BACKENDS: "{{ EDXAPP_THIRD_PARTY_AUTH_BACKENDS }}"
   
-
+  ENABLE_CERTIFICATES_FOR_HONOR_MODE : "{{ EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE }}"
+  
   #must end in slash (https://docs.djangoproject.com/en/1.4/ref/settings/#media-url)
   MEDIA_URL:  "{{ EDXAPP_MEDIA_URL }}/"
   MEDIA_ROOT: "{{ edxapp_media_dir }}/"
