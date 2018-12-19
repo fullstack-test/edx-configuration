@@ -227,6 +227,12 @@ EDXAPP_ENABLE_DASHBOARD_TABS: true
 # Making Honor mode eligible for certificate
 EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE: true
 
+# Social Django defaults to HTTP scheme when generating redirect_uri
+# It is therefore necessary to add this setting in order to support
+# changing the redirect_uri to HTTPS. Defaulting to False (default behavior)
+# and expecting client to override.
+EDXAPP_REDIRECT_IS_HTTPS: false
+
 # This is different from lms/envs/common.py
 # We're turning it on in config because it needs a lot more configuration
 # support, such as settings.DATABASES and initial database creation which is
@@ -300,8 +306,8 @@ EDXAPP_FEATURES:
   ENABLE_SPECIAL_EXAMS: false
   ENABLE_OAUTH2_PROVIDER: "{{ EDXAPP_ENABLE_OAUTH2_PROVIDER }}"
   ENABLE_SYSADMIN_DASHBOARD: "{{ EDXAPP_ENABLE_SYSADMIN_DASHBOARD }}"
-  ENABLE_COURSE_DISCOVERY: : "{{ EDXAPP_ENABLE_COURSE_DISCOVERY }}"
-  ENABLE_DASHBOARD_TABS: : "{{ EDXAPP_ENABLE_DASHBOARD_TABS }}"
+  ENABLE_COURSE_DISCOVERY: "{{ EDXAPP_ENABLE_COURSE_DISCOVERY }}"
+  ENABLE_DASHBOARD_TABS: "{{ EDXAPP_ENABLE_DASHBOARD_TABS }}"
   ENABLE_MOBILE_REST_API: "{{ EDXAPP_ENABLE_MOBILE_REST_API }}"
   CUSTOM_COURSES_EDX: "{{ EDXAPP_CUSTOM_COURSES_EDX }}"
   ENABLE_CSMH_EXTENDED: "{{ EDXAPP_ENABLE_CSMH_EXTENDED }}"
@@ -1118,6 +1124,7 @@ edxapp_generic_auth_config:  &edxapp_generic_auth
   FACEBOOK_API_VERSION: "{{ EDXAPP_FACEBOOK_API_VERSION }}"
   ENTERPRISE_SERVICE_WORKER_USERNAME: "{{ EDXAPP_ENTERPRISE_SERVICE_WORKER_USERNAME }}"
   BRANCH_IO_KEY: "{{ EDXAPP_BRANCH_IO_KEY }}"
+  REDIRECT_IS_HTTPS: "{{ EDXAPP_REDIRECT_IS_HTTPS }}"
 
 generic_cache_config: &default_generic_cache
   BACKEND:  'django.core.cache.backends.memcached.MemcachedCache'
