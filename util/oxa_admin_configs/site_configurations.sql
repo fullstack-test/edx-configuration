@@ -1,8 +1,8 @@
 /* 
-The Script will enbale multiple Django sites along with site configurations. 
+The Script will enable multiple Django sites along with site configurations. 
 
-`GetSiteNames`   :   Initualize the site names based on paramater. example: prod,int,bvt
-`GetSiteIds`     :   Return Site id for Django Sites if already exist. Create Site and return Site id if doesen't exist.
+`GetSiteNames`   :   Initialize  the site names based on paramater. example: prod,int,bvt
+`GetSiteIds`     :   Return Site id for Django Sites if already exist. Create Site and return Site id if doesn't exist.
 `GetSiteconfigs` :   Get site configurations for all the four sites based on the provided environment paramater.
 `CreateorUpdateSiteConfigs` : Update site configurations if already exist. else, create new entry for site configurations.
 
