@@ -32,7 +32,7 @@ fetch_ssl_certificate()
 
     if [[ $? -eq 0 ]]; then
         # Fetch cert from KeyVault
-        az keyvault secret download --vault-name $vault_name --name $crt_secret_name --file /etc/ssl/certs/$CRT_FILE --encoding base64
+        az keyvault secret download --vault-name $vault_name --name $crt_secret_name --file /etc/ssl/certs/$crt_file --encoding base64
 
         result=$?
         if [[ $result -ne 0 ]]; then
@@ -42,7 +42,7 @@ fetch_ssl_certificate()
 
 
         # Fetch key from KeyVault
-        az keyvault secret download --vault-name $VAULT_NAME --name $key_secret_name --file /etc/ssl/private/$KEY_FILE --encoding base64
+        az keyvault secret download --vault-name $vault_name --name $key_secret_name --file /etc/ssl/private/$key_file --encoding base64
         
         result=$?
         if [[ $result -ne 0 ]]; then
@@ -76,59 +76,6 @@ source_utilities()
     source $utilities_path
 }
 
-##
-## Parse script parameters
-##
-parse_args()
-{
-    while [[ "$#" -gt 0 ]]
-    do
-
-        arg_value="${2}"
-        shift_once=0
-
-        if [[ "${arg_value}" =~ "--" ]]; 
-        then
-            arg_value=""
-            shift_once=1
-        fi
-
-        # Log input parameters to facilitate troubleshooting
-        echo "Option '${1}' set with value '"${arg_value}"'"
-
-        case "$1" in
-            --playbook)
-                REPO_ROOT="${arg_value}"
-                ;;
-            --config)
-                CONFIG_PATH="${arg_value}"
-                ;;
-            --vault-name)
-                VAULT_NAME="${arg_value}"
-                ;;
-            --crt-secret-name)
-                CRT_SECRET_NAME="${arg_value}"
-                ;;
-            --key-secret-name)
-                KEY_SECRET_NAME="${arg_value}"
-                ;;
-            --crt-filename)
-                CRT_FILE="${arg_value}"
-                ;;
-            --key-filename)
-                KEY_FILE="${arg_value}"
-                ;;
-        esac
-
-        shift # past argument or value
-
-        if [ $shift_once -eq 0 ]; 
-        then
-            shift # past argument or value
-        fi
-    done
-}
-
 function finish {
     echo "Installation finished at $(date '+%Y-%m-%d %H:%M:%S')"
 }
@@ -141,28 +88,34 @@ parse_args $@ # pass existing command line arguments
 
 if [[ ! $OPENEDX_RELEASE ]]; then
     echo "You must define OPENEDX_RELEASE"
-    exit
+    exit 2
 fi
 
 if [[ `lsb_release -rs` != "16.04" ]]; then
     echo "This script is only known to work on Ubuntu 16.04, exiting..."
-    exit
+    exit 2
 fi
 
-if [[ ! $target_playbook ]]; 
+if [[ ! $OXA_TARGET_PLAYBOOK ]]; 
 then
     echo "You must specify the target playbook to execute: --playbook x.yml"
-    exit
+    exit 2
+else
+    target_playbook=$OXA_TARGET_PLAYBOOK
 fi
 
-if [[ ! $playbook_configs ]] || [[ ! -f $playbook_configs ]]; then
+if [[ ! $OXA_PLAYBOOK_CONFIGS ]] || [[ ! -f $OXA_PLAYBOOK_CONFIGS ]]; then
     echo "You must specify the path to the config file to use: --config /a.yml"
-    exit
+    exit 2
+else
+     playbook_configs=$OXA_PLAYBOOK_CONFIGS
 fi
 
-if [[ ! $vault_name ]] || [[ ! $crt_secret_name ]] || [[ ! $key_secret_name ]]; then
-    echo "You must specify the path to the config file to use: --config /a.yml"
-    exit
+if [[ ! $OXA_VAULT_NAME ]]; then
+    echo "You must specify the vault and certificate secret name & key"
+    exit 2
+else
+    vault_name=$OXA_VAULT_NAME
 fi
 
 ##
@@ -266,7 +219,7 @@ sudo -H pip install -r requirements.txt
 ##
 ## Run the specified playbook in the configuration/playbooks directory
 ##
-cd /var/tmp/configuration/playbooks && sudo -E ansible-playbook -c local ./$target_playbook -i "localhost," $EXTRA_VARS "$@"
+cd /var/tmp/configuration/playbooks && sudo -E ansible-playbook -c local ./"${target_playbook}" -i "localhost," $EXTRA_VARS "$@"
 ansible_status=$?
 
 if [[ $ansible_status -ne 0 ]]; then
