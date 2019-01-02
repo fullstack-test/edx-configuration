@@ -63,15 +63,11 @@ geo $http_x_forwarded_for $embargo {
 server {
   # LMS configuration file for nginx, templated by ansible
 
-  {% if NGINX_EDXAPP_ENABLE_S3_MAINTENANCE %}
-
-  # Do not include a 502 error in NGINX_ERROR_PAGES when 
+  # Do not include a 503 error in NGINX_ERROR_PAGES when 
   # NGINX_EDXAPP_ENABLE_MAINTENANCE is enabled.
 
-  error_page 502 @maintenance;
-
-    {% include "s3_maintenance.j2" %}
-  
+  {% if NGINX_EDXAPP_ENABLE_MAINTENANCE %}
+  error_page 503 @maintenance;
   {% endif %}
 
   # error pages
@@ -154,8 +150,21 @@ error_page {{ k }} {{ v }};
       {% include "basic-auth.j2" %}
     {% endif %}
 
+    {% if NGINX_EDXAPP_ENABLE_MAINTENANCE %}
+    if ($maintenance) {
+        return 503;
+    }
+    {% endif %}
+
     try_files $uri @proxy_to_lms_app;
   }
+
+  {% if NGINX_EDXAPP_ENABLE_MAINTENANCE %}
+  location @maintenance {
+      root /edx/var/nginx/server-static;
+      rewrite ^(.*)$ /maintenance.html break;
+  }
+  {% endif %}
 
   # /login?next=<any image> can be used by 3rd party sites in <img> tags to
   # determine whether a user on their site is logged into edX.
