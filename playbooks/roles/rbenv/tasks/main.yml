@@ -178,7 +178,7 @@
   tags:
     - install
     - install:base
-	
+
 - name: remove rbenv version of rake
   file: path="{{ rbenv_dir }}/.rbenv/versions/{{ rbenv_ruby_version }}/bin/rake" state=absent
   when: jenkins_worker is not defined or not jenkins_worker
