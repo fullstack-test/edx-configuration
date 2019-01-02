@@ -171,14 +171,6 @@
     - install
     - install:base
 
-- name: update rubygems
-  shell: "gem update --system {{ rbenv_rubygems_version }}"
-  become_user: "{{ rbenv_user }}"
-  environment: "{{ rbenv_environment }}"
-  tags:
-    - install
-    - install:base
-
 - name: remove rbenv version of rake
   file: path="{{ rbenv_dir }}/.rbenv/versions/{{ rbenv_ruby_version }}/bin/rake" state=absent
   when: jenkins_worker is not defined or not jenkins_worker
@@ -194,7 +186,15 @@
   tags:
     - install
     - install:base
-    
+
+- name: update rubygems
+  shell: "gem install rubygems-update && update_rubygems"
+  become_user: "{{ rbenv_user }}"
+  environment: "{{ rbenv_environment }}"
+  tags:
+    - install
+    - install:base
+
 - name: rehash
   shell: "rbenv rehash"
   become_user: "{{ rbenv_user }}"
