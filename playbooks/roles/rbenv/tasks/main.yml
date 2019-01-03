@@ -194,7 +194,7 @@
   tags:
     - install
     - install:base
-    
+
 - name: rehash
   shell: "rbenv rehash"
   become_user: "{{ rbenv_user }}"
