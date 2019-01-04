@@ -271,6 +271,9 @@ EDXAPP_SHOW_HEADER_LANGUAGE_SELECTOR: false
 # Display a language selector in the LMS footer.
 EDXAPP_SHOW_FOOTER_LANGUAGE_SELECTOR: false
 
+# Configure x_frame_options in LMS/CMS
+EDXAPP_X_FRAME_OPTIONS: "DENY"
+
 EDXAPP_FEATURES:
   AUTH_USE_OPENID_PROVIDER: true
   ENABLE_DISCUSSION_SERVICE: true
@@ -1421,6 +1424,7 @@ lms_env_config:
   GOOGLE_SITE_VERIFICATION_ID: "{{ EDXAPP_GOOGLE_SITE_VERIFICATION_ID }}"
   STATIC_URL_BASE: "{{ EDXAPP_LMS_STATIC_URL_BASE }}"
   LMS_ALLOWED_HOSTS: "{{ EDXAPP_LMS_ALLOWED_HOSTS }}"
+  X_FRAME_OPTIONS: "{{ EDXAPP_X_FRAME_OPTIONS }}"
 
 cms_auth_config:
   <<: *edxapp_generic_auth
@@ -1462,6 +1466,7 @@ cms_env_config:
   COURSE_IMPORT_EXPORT_BUCKET: "{{ EDXAPP_IMPORT_EXPORT_BUCKET }}"
   STATIC_URL_BASE: "{{ EDXAPP_CMS_STATIC_URL_BASE }}"
   CMS_ALLOWED_HOSTS: "{{ EDXAPP_CMS_ALLOWED_HOSTS }}"
+  X_FRAME_OPTIONS: "{{ EDXAPP_X_FRAME_OPTIONS }}"
 
 # install dir for the edx-platform repo
 edxapp_code_dir: "{{ edxapp_app_dir }}/edx-platform"
