@@ -306,6 +306,8 @@ EDXAPP_SHOW_FOOTER_LANGUAGE_SELECTOR: false
 # Configure x_frame_options in LMS/CMS
 EDXAPP_X_FRAME_OPTIONS: "DENY"
 
+EDXAPP_ENCRYPT_SESSION_KEY_USING_MD5: true
+
 EDXAPP_FEATURES:
   AUTH_USE_OPENID_PROVIDER: true
   ENABLE_DISCUSSION_SERVICE: true
@@ -1370,6 +1372,8 @@ generic_env_config:  &edxapp_generic_env
   
   # Social Django HTTP scheme when generating redirect_uri
   REDIRECT_IS_HTTPS: "{{ EDXAPP_REDIRECT_IS_HTTPS }}"
+  
+  ENCRYPT_SESSION_KEY_USING_MD5: "{{ EDXAPP_ENCRYPT_SESSION_KEY_USING_MD5 }}"
 
 lms_auth_config:
   <<: *edxapp_generic_auth
