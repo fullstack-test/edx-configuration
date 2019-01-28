@@ -63,15 +63,11 @@ geo $http_x_forwarded_for $embargo {
 server {
   # LMS configuration file for nginx, templated by ansible
 
-  {% if NGINX_EDXAPP_ENABLE_S3_MAINTENANCE %}
-
-  # Do not include a 502 error in NGINX_ERROR_PAGES when 
+  # Do not include a 503 error in NGINX_ERROR_PAGES when 
   # NGINX_EDXAPP_ENABLE_MAINTENANCE is enabled.
 
-  error_page 502 @maintenance;
-
-    {% include "s3_maintenance.j2" %}
-  
+  {% if NGINX_EDXAPP_ENABLE_MAINTENANCE %}
+  error_page 503 @maintenance;
   {% endif %}
 
   # error pages
@@ -90,8 +86,10 @@ error_page {{ k }} {{ v }};
 
   {% if NGINX_ENABLE_SSL or NGINX_REDIRECT_TO_HTTPS %}
   # request the browser to use SSL for all connections
-  add_header Strict-Transport-Security "max-age={{ NGINX_HSTS_MAX_AGE }}";
+  add_header Strict-Transport-Security "max-age={{ NGINX_HSTS_MAX_AGE }}; includeSubDomains";
   {% endif %}
+  
+  {% include "secure_headers.j2" %}
 
   # Prevent invalid display courseware in IE 10+ with high privacy settings
   add_header P3P '{{ NGINX_P3P_MESSAGE }}';
@@ -148,6 +146,14 @@ error_page {{ k }} {{ v }};
 
     {{ NGINX_EDXAPP_LMS_APP_EXTRA }}
   }
+  
+  {% if NGINX_EDXAPP_ENABLE_MAINTENANCE %}
+  location ~ ^/ {
+    if ($maintenance) {
+        return 503;
+    }
+  }
+  {% endif %}
 
   location / {
     {% if EDXAPP_LMS_ENABLE_BASIC_AUTH|bool %}
@@ -156,6 +162,13 @@ error_page {{ k }} {{ v }};
 
     try_files $uri @proxy_to_lms_app;
   }
+
+  {% if NGINX_EDXAPP_ENABLE_MAINTENANCE %}
+  location @maintenance {
+      root /edx/var/nginx/server-static;
+      rewrite ^(.*)$ /maintenance.html break;
+  }
+  {% endif %}
 
   # /login?next=<any image> can be used by 3rd party sites in <img> tags to
   # determine whether a user on their site is logged into edX.

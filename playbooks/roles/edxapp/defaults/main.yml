@@ -202,11 +202,18 @@ EDXAPP_ENABLE_OAUTH2_PROVIDER: false
 
 EDXAPP_ENABLE_MOBILE_REST_API: false
 
+# Setting for enabling custom auth (local username/password based authentication)
+EDXAPP_ENABLE_CUSTOM_AUTH: true
+
 # Settings for API access management
 EDXAPP_API_ACCESS_MANAGER_EMAIL: "api-access@example.com"
 EDXAPP_API_ACCESS_FROM_EMAIL: "api-requests@example.com"
 EDXAPP_API_DOCUMENTATION_URL: "http://course-catalog-api-guide.readthedocs.io/en/latest/"
 EDXAPP_AUTH_DOCUMENTATION_URL: "http://course-catalog-api-guide.readthedocs.io/en/latest/authentication/index.html"
+
+# Settings for cookie banner
+EDXAPP_API_COOKIE_URL: ""
+EDXAPP_ENABLE_COOKIE_CONSENT: false 
 
 # Settings for affiliate cookie tracking
 EDXAPP_AFFILIATE_COOKIE_NAME: 'dev_affiliate_id'
@@ -219,6 +226,31 @@ EDXAPP_ENABLE_CREDIT_API: false
 EDXAPP_CUSTOM_COURSES_EDX: false
 
 EDXAPP_ENABLE_SYSADMIN_DASHBOARD: false
+
+# Making the display of course discovery and dashboard tabs configurable
+EDXAPP_ENABLE_COURSE_DISCOVERY: true
+EDXAPP_ENABLE_DASHBOARD_TABS: true
+
+# Making Honor mode eligible for certificate
+EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE: true
+
+# Azure key-vault configurations
+EDXAPP_GET_SECRETS_FROM_AZURE_KEYVAULT: false
+EDXAPP_AZURE_MSI_REQUEST_URI: ''
+EDXAPP_KEYVAULT_PAYLOAD: ''
+EDXAPP_KEYVAULT_URL: ''
+EDXAPP_KEYVAULT_API_VERSION: ''
+EDXAPP_LMS_NON_SECURE_KEY_NAME: ''
+EDXAPP_LMS_SECURE_KEY_NAME: ''
+EDXAPP_CMS_NON_SECURE_KEY_NAME: ''
+EDXAPP_CMS_SECURE_KEY_NAME: ''
+
+# Social Django defaults to HTTP scheme when generating redirect_uri
+# It is therefore necessary to add this setting in order to support
+# changing the redirect_uri to HTTPS. Defaulting to False (default behavior)
+# and expecting client to override.
+EDXAPP_REDIRECT_IS_HTTPS: false
+
 # This is different from lms/envs/common.py
 # We're turning it on in config because it needs a lot more configuration
 # support, such as settings.DATABASES and initial database creation which is
@@ -271,6 +303,11 @@ EDXAPP_SHOW_HEADER_LANGUAGE_SELECTOR: false
 # Display a language selector in the LMS footer.
 EDXAPP_SHOW_FOOTER_LANGUAGE_SELECTOR: false
 
+# Configure x_frame_options in LMS/CMS
+EDXAPP_X_FRAME_OPTIONS: "DENY"
+
+EDXAPP_ENCRYPT_SESSION_KEY_USING_MD5: true
+
 EDXAPP_FEATURES:
   AUTH_USE_OPENID_PROVIDER: true
   ENABLE_DISCUSSION_SERVICE: true
@@ -286,18 +323,23 @@ EDXAPP_FEATURES:
   ENABLE_CORS_HEADERS: false
   ENABLE_CROSS_DOMAIN_CSRF_COOKIE: false
   ENABLE_COUNTRY_ACCESS: false
+  ENABLE_CUSTOM_AUTH: "{{ EDXAPP_ENABLE_CUSTOM_AUTH }}"
   ENABLE_EDXNOTES: "{{ EDXAPP_ENABLE_EDXNOTES }}"
   ENABLE_CREDIT_API: "{{ EDXAPP_ENABLE_CREDIT_API }}"
   ENABLE_CREDIT_ELIGIBILITY: "{{ EDXAPP_ENABLE_CREDIT_ELIGIBILITY }}"
   ENABLE_SPECIAL_EXAMS: false
   ENABLE_OAUTH2_PROVIDER: "{{ EDXAPP_ENABLE_OAUTH2_PROVIDER }}"
   ENABLE_SYSADMIN_DASHBOARD: "{{ EDXAPP_ENABLE_SYSADMIN_DASHBOARD }}"
+  ENABLE_COURSE_DISCOVERY: "{{ EDXAPP_ENABLE_COURSE_DISCOVERY }}"
+  ENABLE_DASHBOARD_TABS: "{{ EDXAPP_ENABLE_DASHBOARD_TABS }}"
   ENABLE_MOBILE_REST_API: "{{ EDXAPP_ENABLE_MOBILE_REST_API }}"
   CUSTOM_COURSES_EDX: "{{ EDXAPP_CUSTOM_COURSES_EDX }}"
   ENABLE_CSMH_EXTENDED: "{{ EDXAPP_ENABLE_CSMH_EXTENDED }}"
   ENABLE_READING_FROM_MULTIPLE_HISTORY_TABLES: "{{ EDXAPP_ENABLE_READING_FROM_MULTIPLE_HISTORY_TABLES }}"
   SHOW_HEADER_LANGUAGE_SELECTOR: "{{ EDXAPP_SHOW_HEADER_LANGUAGE_SELECTOR }}"
   SHOW_FOOTER_LANGUAGE_SELECTOR: "{{ EDXAPP_SHOW_FOOTER_LANGUAGE_SELECTOR }}"
+  ENABLE_COOKIE_CONSENT: "{{ EDXAPP_ENABLE_COOKIE_CONSENT }}"
+  ONLY_THIRD_PARTY_AUTH: "{{ EDXAPP_ONLY_THIRD_PARTY_AUTH }}"
 
 # This needs to be set to localhost
 # if xqueue is run on the same server
@@ -789,6 +831,10 @@ EDXAPP_SOCIAL_AUTH_SAML_SP_PUBLIC_CERT_DICT: {}
 EDXAPP_SESSION_SAVE_EVERY_REQUEST: false
 
 EDXAPP_SESSION_COOKIE_SECURE: false
+EDXAPP_ONLY_THIRD_PARTY_AUTH: false
+# TODO: bbeggs remove this before prod, temp fix to get load testing running
+EDXAPP_LMS_ALLOWED_HOSTS: ["*", "{{ EDXAPP_LMS_SITE_NAME }}", "{{ EDXAPP_PREVIEW_LMS_BASE }}"]
+EDXAPP_CMS_ALLOWED_HOSTS: ["*", "{{ EDXAPP_CMS_SITE_NAME }}"]
 
 # Optionally add a cron job to run the "clearsessions" management command to delete expired sessions
 # Hours and minutes follow cron syntax.
@@ -837,6 +883,9 @@ EDXAPP_BLOCK_STRUCTURES_SETTINGS:
 
   PRUNING_ACTIVE: false
 
+# Third Party Backends
+EDXAPP_THIRD_PARTY_AUTH_BACKENDS: ''
+ 
 # Configuration needed for LMS to communicate with the Journals service
 JOURNALS_SERVICE_USER_EMAIL: "journals_worker@example.com"
 JOURNALS_SERVICE_USER_NAME: "journals_worker"
@@ -1061,6 +1110,9 @@ edxapp_generic_auth_config:  &edxapp_generic_auth
   AWS_QUERYSTRING_AUTH: "{{ EDXAPP_AWS_QUERYSTRING_AUTH }}"
   AWS_STORAGE_BUCKET_NAME: "{{ EDXAPP_AWS_STORAGE_BUCKET_NAME }}"
   AWS_S3_CUSTOM_DOMAIN: "{{ EDXAPP_AWS_S3_CUSTOM_DOMAIN }}"
+  AZURE_ACCOUNT_KEY: "{{ EDXAPP_AZURE_ACCOUNT_KEY }}"
+  AZURE_ACCOUNT_NAME: "{{ EDXAPP_AZURE_ACCOUNT_NAME }}"
+  AZURE_CONTAINER: "{{ EDXAPP_AZURE_CONTAINER }}"
   SWIFT_USERNAME: "{{ EDXAPP_SWIFT_USERNAME }}"
   SWIFT_KEY: "{{ EDXAPP_SWIFT_KEY }}"
   SWIFT_TENANT_ID: "{{ EDXAPP_SWIFT_TENANT_ID }}"
@@ -1128,6 +1180,7 @@ generic_env_config:  &edxapp_generic_env
   XBLOCK_FS_STORAGE_BUCKET: "{{ EDXAPP_XBLOCK_FS_STORAGE_BUCKET }}"
   XBLOCK_FS_STORAGE_PREFIX: "{{ EDXAPP_XBLOCK_FS_STORAGE_PREFIX }}"
   ANALYTICS_DASHBOARD_URL: '{{ EDXAPP_ANALYTICS_DASHBOARD_URL }}'
+  API_COOKIE_URL: "{{ EDXAPP_API_COOKIE_URL }}"
   CELERY_BROKER_VHOST: "{{ EDXAPP_CELERY_BROKER_VHOST }}"
   CELERY_BROKER_USE_SSL: "{{ EDXAPP_CELERY_BROKER_USE_SSL }}"
   CELERY_EVENT_QUEUE_TTL: "{{ EDXAPP_CELERY_EVENT_QUEUE_TTL }}"
@@ -1145,6 +1198,7 @@ generic_env_config:  &edxapp_generic_env
     STORAGE_TYPE: "{{ EDXAPP_GRADE_STORAGE_TYPE | default(None) }}"
     BUCKET: "{{ EDXAPP_GRADE_BUCKET | default(None) }}"
     ROOT_PATH: "{{ EDXAPP_GRADE_ROOT_PATH | default(None) }}"
+    CONTAINER: "{{ EDXAPP_GRADE_STORAGE_CONTAINER | default(None) }}"
   STATIC_ROOT_BASE: "{{ edxapp_staticfile_dir }}"
   LMS_BASE: "{{ EDXAPP_LMS_BASE }}"
   CMS_BASE: "{{ EDXAPP_CMS_BASE }}"
@@ -1186,7 +1240,10 @@ generic_env_config:  &edxapp_generic_env
       - ISSUER: "{{ EDXAPP_LMS_ISSUER }}"
         AUDIENCE: "{{ EDXAPP_JWT_AUDIENCE }}"
         SECRET_KEY: "{{ EDXAPP_JWT_SECRET_KEY }}"
-
+  THIRD_PARTY_AUTH_BACKENDS: "{{ EDXAPP_THIRD_PARTY_AUTH_BACKENDS }}"
+  
+  ENABLE_CERTIFICATES_FOR_HONOR_MODE : "{{ EDXAPP_ENABLE_CERTIFICATES_FOR_HONOR_MODE }}"
+  
   #must end in slash (https://docs.djangoproject.com/en/1.4/ref/settings/#media-url)
   MEDIA_URL:  "{{ EDXAPP_MEDIA_URL }}/"
   MEDIA_ROOT: "{{ edxapp_media_dir }}/"
@@ -1312,6 +1369,11 @@ generic_env_config:  &edxapp_generic_env
   PASSWORD_MAX_LENGTH: "{{ EDXAPP_PASSWORD_MAX_LENGTH }}"
   PASSWORD_COMPLEXITY: "{{ EDXAPP_PASSWORD_COMPLEXITY }}"
   PASSWORD_POLICY_COMPLIANCE_ROLLOUT_CONFIG: "{{ EDXAPP_PASSWORD_POLICY_COMPLIANCE_ROLLOUT_CONFIG }}"
+  
+  # Social Django HTTP scheme when generating redirect_uri
+  REDIRECT_IS_HTTPS: "{{ EDXAPP_REDIRECT_IS_HTTPS }}"
+  
+  ENCRYPT_SESSION_KEY_USING_MD5: "{{ EDXAPP_ENCRYPT_SESSION_KEY_USING_MD5 }}"
 
 lms_auth_config:
   <<: *edxapp_generic_auth
@@ -1412,6 +1474,15 @@ lms_env_config:
   ANALYTICS_API_URL: "{{ EDXAPP_LMS_ANALYTICS_API_URL }}"
   GOOGLE_SITE_VERIFICATION_ID: "{{ EDXAPP_GOOGLE_SITE_VERIFICATION_ID }}"
   STATIC_URL_BASE: "{{ EDXAPP_LMS_STATIC_URL_BASE }}"
+  LMS_ALLOWED_HOSTS: "{{ EDXAPP_LMS_ALLOWED_HOSTS }}"
+  GET_SECRETS_FROM_AZURE_KEYVAULT: "{{ EDXAPP_GET_SECRETS_FROM_AZURE_KEYVAULT }}"
+  AZURE_MSI_REQUEST_URI: "{{ EDXAPP_AZURE_MSI_REQUEST_URI }}" 
+  KEYVAULT_PAYLOAD: "{{ EDXAPP_KEYVAULT_PAYLOAD }}"
+  KEYVAULT_URL: "{{ EDXAPP_KEYVAULT_URL }}"
+  LMS_NON_SECURE_KEY_NAME: "{{ EDXAPP_LMS_NON_SECURE_KEY_NAME }}"
+  LMS_SECURE_KEY_NAME: "{{ EDXAPP_LMS_SECURE_KEY_NAME }}"
+  KEYVAULT_API_VERSION: "{{ EDXAPP_KEYVAULT_API_VERSION }}"
+  X_FRAME_OPTIONS: "{{ EDXAPP_X_FRAME_OPTIONS }}"
 
 cms_auth_config:
   <<: *edxapp_generic_auth
@@ -1452,6 +1523,15 @@ cms_env_config:
   ALTERNATE_WORKER_QUEUES: "lms"
   COURSE_IMPORT_EXPORT_BUCKET: "{{ EDXAPP_IMPORT_EXPORT_BUCKET }}"
   STATIC_URL_BASE: "{{ EDXAPP_CMS_STATIC_URL_BASE }}"
+  CMS_ALLOWED_HOSTS: "{{ EDXAPP_CMS_ALLOWED_HOSTS }}"
+  GET_SECRETS_FROM_AZURE_KEYVAULT: "{{ EDXAPP_GET_SECRETS_FROM_AZURE_KEYVAULT }}"
+  AZURE_MSI_REQUEST_URI: "{{ EDXAPP_AZURE_MSI_REQUEST_URI }}" 
+  KEYVAULT_PAYLOAD: "{{ EDXAPP_KEYVAULT_PAYLOAD }}"
+  KEYVAULT_URL: "{{ EDXAPP_KEYVAULT_URL }}"
+  CMS_NON_SECURE_KEY_NAME: "{{ EDXAPP_CMS_NON_SECURE_KEY_NAME }}"
+  CMS_SECURE_KEY_NAME: "{{ EDXAPP_CMS_SECURE_KEY_NAME }}"
+  KEYVAULT_API_VERSION: "{{ EDXAPP_KEYVAULT_API_VERSION }}"
+  X_FRAME_OPTIONS: "{{ EDXAPP_X_FRAME_OPTIONS }}"
 
 # install dir for the edx-platform repo
 edxapp_code_dir: "{{ edxapp_app_dir }}/edx-platform"
@@ -1488,7 +1568,7 @@ edxapp_theme_source_repo: 'https://{{ COMMON_GIT_MIRROR }}/Stanford-Online/edx-t
 edxapp_theme_version: 'master'
 
 # make this the public URL instead of writable
-edx_platform_repo: "https://{{ COMMON_GIT_MIRROR }}/edx/edx-platform.git"
+edx_platform_repo: "https://{{ COMMON_GIT_MIRROR }}/microsoft/edx-platform.git"
 # `edx_platform_version` can be anything that git recognizes as a commit
 # reference, including a tag, a branch name, or a commit hash
 edx_platform_version: 'release'
