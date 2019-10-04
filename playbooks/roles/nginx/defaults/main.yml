@@ -131,6 +131,7 @@ NGINX_EDXAPP_ERROR_PAGES:
 
 CMS_HOSTNAME: '~^((stage|prod)-)?studio.*'
 LMS_HOSTNAME: !!null
+OLD_LMS_HOSTNAME: !!null
 
 nginx_template_dir: "edx/app/nginx/sites-available"
 

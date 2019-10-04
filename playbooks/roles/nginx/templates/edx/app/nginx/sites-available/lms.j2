@@ -94,10 +94,10 @@ error_page {{ k }} {{ v }};
   # Prevent invalid display courseware in IE 10+ with high privacy settings
   add_header P3P '{{ NGINX_P3P_MESSAGE }}';
 
-  {% if NGINX_EDXAPP_ENABLE_OXA_REDIRECT  and LMS_HOSTNAME %}
+  {% if NGINX_EDXAPP_ENABLE_OXA_REDIRECT and LMS_HOSTNAME and OLD_LMS_HOSTNAME %}
   # Redirect LMS from openedx.* to oxa.*
   server_name {{LMS_HOSTNAME}};
-  if ($host != $server_name)
+  if ( $host = {{OLD_LMS_HOSTNAME}} )
   {
    return 301 $scheme://$server_name$request_uri;
   }
