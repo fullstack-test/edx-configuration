@@ -99,7 +99,7 @@ error_page {{ k }} {{ v }};
   server_name {{LMS_HOSTNAME}};
   if ( $host = {{OLD_LMS_HOSTNAME}} )
   {
-   return 301 $scheme://$server_name$request_uri;
+    return 301 $scheme://$server_name$request_uri;
   }
   {% endif %}
 
